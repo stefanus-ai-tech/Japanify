@@ -125,7 +125,7 @@
     <script>
         function convertName() {
             const input = document.getElementById('nameInput').value.trim();
-            let firstName = input.split(' ')[0].toLowerCase().replace(/h/g, ''); // Remove all 'h'
+            const words = input.split(' ').slice(0, 4); // Take up to 4 words
 
             let japanized = '';
             let kana = '';
@@ -173,32 +173,40 @@
                 }
             }
 
-            for (let i = 0; i < firstName.length; i++) {
-                let char = firstName[i];
-                let nextChar = firstName[i + 1];
-                let twoChars = char + nextChar;
+            words.forEach(word => {
+                let firstName = word.toLowerCase().replace(/hu/g, 'u'); // Remove 'h' if followed by 'u'
 
-                if (i === firstName.length - 1 && char === 't') {
-                    japanized += 'to';
-                    kana += 'ト';
-                } else if (twoChars in conversion) {
-                    japanized += twoChars;
-                    kana += conversion[twoChars];
-                    i++;
-                } else if (char in conversion) {
-                    japanized += char;
-                    kana += conversion[char];
-                } else {
-                    let consonantResult = handleConsonant(char);
-                    japanized += consonantResult.romaji;
-                    kana += consonantResult.kana;
+                for (let i = 0; i < firstName.length; i++) {
+                    let char = firstName[i];
+                    let nextChar = firstName[i + 1];
+                    let twoChars = char + nextChar;
+
+                    if (i === firstName.length - 1 && char === 't') {
+                        japanized += 'to';
+                        kana += 'ト';
+                    } else if (twoChars in conversion) {
+                        japanized += twoChars;
+                        kana += conversion[twoChars];
+                        i++;
+                    } else if (char in conversion) {
+                        japanized += char;
+                        kana += conversion[char];
+                    } else {
+                        let consonantResult = handleConsonant(char);
+                        japanized += consonantResult.romaji;
+                        kana += consonantResult.kana;
+                    }
                 }
-            }
 
-            document.getElementById('result').textContent = japanized;
-            document.getElementById('kana').textContent = kana;
+                japanized += ' ';
+                kana += ' ';
+            });
+
+            document.getElementById('result').textContent = japanized.trim();
+            document.getElementById('kana').textContent = kana.trim();
             document.getElementById('playButton').disabled = false;
         }
+
 
     
         async function playAudio() {
