@@ -125,12 +125,7 @@
     <script>
         function convertName() {
             const input = document.getElementById('nameInput').value.trim();
-            let firstName = input.split(' ')[0].toLowerCase().replace(/([bcdfghjklmnpqrstvwxyz])h/g, '$1');
-
-            // Remove the last 'h' if it exists
-            if (firstName.endsWith('h')) {
-                firstName = firstName.slice(0, -1);
-            }
+            let firstName = input.split(' ')[0].toLowerCase().replace(/h/g, ''); // Remove all 'h'
 
             let japanized = '';
             let kana = '';
@@ -157,7 +152,6 @@
                 tu: 'ツ'
             };
 
-            // Function to handle consonants
             function handleConsonant(char) {
                 switch (char) {
                     case 'c':
@@ -205,9 +199,6 @@
             document.getElementById('kana').textContent = kana;
             document.getElementById('playButton').disabled = false;
         }
-
-
-
 
     
         async function playAudio() {
