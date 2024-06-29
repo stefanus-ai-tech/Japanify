@@ -30,7 +30,7 @@
             box-sizing: border-box;
         }
         h1 {
-            color: #d35400;
+            color: #d35400; /* orange colorz */
             margin-bottom: 1rem;
         }
         input, button {
@@ -128,7 +128,7 @@
             const firstName = input.split(' ')[0].toLowerCase().replace(/([bcdfghjklmnpqrstvwxyz])h/g, '$1');
             let japanized = '';
             let kana = '';
-    
+
             const conversion = {
                 a: 'ア', i: 'イ', u: 'ウ', e: 'エ', o: 'オ',
                 ka: 'カ', ki: 'キ', ku: 'ク', ke: 'ケ', ko: 'コ',
@@ -149,13 +149,16 @@
                 va: 'ヴァ', vi: 'ヴィ', vu: 'ヴ', ve: 'ヴェ', vo: 'ヴォ',
                 wa: 'ワ', wi: 'ウィ', we: 'ウェ', wo: 'ウォ'
             };
-    
+
             for (let i = 0; i < firstName.length; i++) {
                 let char = firstName[i];
                 let nextChar = firstName[i + 1];
                 let twoChars = char + nextChar;
-    
-                if (twoChars in conversion) {
+
+                if (i === firstName.length - 1 && char === 't') {
+                    japanized += 'tu';
+                    kana += 'ツ';
+                } else if (twoChars in conversion) {
                     japanized += twoChars;
                     kana += conversion[twoChars];
                     i++;
@@ -163,7 +166,7 @@
                     japanized += char;
                     kana += conversion[char];
                 } else {
-                    switch(char) {
+                    switch (char) {
                         case 'c':
                             if (nextChar === 'h') {
                                 japanized += 'chi';
@@ -224,11 +227,12 @@
                     }
                 }
             }
-    
+
             document.getElementById('result').textContent = japanized;
             document.getElementById('kana').textContent = kana;
             document.getElementById('playButton').disabled = false;
         }
+
     
         async function playAudio() {
             const kana = document.getElementById('kana').textContent;
