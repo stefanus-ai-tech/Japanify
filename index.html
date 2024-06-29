@@ -153,8 +153,31 @@
                 pa: 'パ', pi: 'ピ', pu: 'プ', pe: 'ペ', po: 'ポ',
                 fa: 'ファ', fi: 'フィ', fe: 'フェ', fo: 'フォ',
                 va: 'ヴァ', vi: 'ヴィ', vu: 'ヴ', ve: 'ヴェ', vo: 'ヴォ',
-                wa: 'ワ', wi: 'ウィ', we: 'ウェ', wo: 'ウォ'
+                wi: 'ウィ', we: 'ウェ', wo: 'ウォ',
+                tu: 'ツ'
             };
+
+            // Function to handle consonants
+            function handleConsonant(char) {
+                switch (char) {
+                    case 'c':
+                        return { romaji: 'ku', kana: 'ク' };
+                    case 'j':
+                        return { romaji: 'ji', kana: 'ジ' };
+                    case 'l':
+                        return { romaji: 'ru', kana: 'ル' };
+                    case 'q':
+                        return { romaji: 'ku', kana: 'ク' };
+                    case 'v':
+                        return { romaji: 'bu', kana: 'ブ' };
+                    case 'x':
+                        return { romaji: 'kusu', kana: 'クス' };
+                    case 'w':
+                        return { romaji: 'wa', kana: 'ワ' };
+                    default:
+                        return { romaji: char + 'u', kana: conversion[char + 'u'] || char };
+                }
+            }
 
             for (let i = 0; i < firstName.length; i++) {
                 let char = firstName[i];
@@ -162,8 +185,8 @@
                 let twoChars = char + nextChar;
 
                 if (i === firstName.length - 1 && char === 't') {
-                    japanized += 'tu';
-                    kana += 'ツ';
+                    japanized += 'to';
+                    kana += 'ト';
                 } else if (twoChars in conversion) {
                     japanized += twoChars;
                     kana += conversion[twoChars];
@@ -172,65 +195,9 @@
                     japanized += char;
                     kana += conversion[char];
                 } else {
-                    switch (char) {
-                        case 'c':
-                            if (nextChar === 'h') {
-                                japanized += 'chi';
-                                kana += 'チ';
-                                i++;
-                            } else {
-                                japanized += 'ku';
-                                kana += 'ク';
-                            }
-                            break;
-                        case 'j':
-                            japanized += 'ji';
-                            kana += 'ジ';
-                            break;
-                        case 'l':
-                            japanized += 'ru';
-                            kana += 'ル';
-                            break;
-                        case 'q':
-                            japanized += 'ku';
-                            kana += 'ク';
-                            break;
-                        case 'v':
-                            japanized += 'bu';
-                            kana += 'ブ';
-                            break;
-                        case 'x':
-                            japanized += 'kusu';
-                            kana += 'クス';
-                            break;
-                        case 'w':
-                            if (nextChar === 'i') {
-                                japanized += 'wi';
-                                kana += 'ウィ';
-                                i++;
-                            } else if (nextChar === 'e') {
-                                japanized += 'we';
-                                kana += 'ウェ';
-                                i++;
-                            } else if (nextChar === 'o') {
-                                japanized += 'wo';
-                                kana += 'ウォ';
-                                i++;
-                            } else {
-                                japanized += 'wa';
-                                kana += 'ワ';
-                            }
-                            break;
-                        default:
-                            let consonantWithU = char + 'u';
-                            if (consonantWithU in conversion) {
-                                japanized += consonantWithU;
-                                kana += conversion[consonantWithU];
-                            } else {
-                                japanized += char;
-                                kana += char;
-                            }
-                    }
+                    let consonantResult = handleConsonant(char);
+                    japanized += consonantResult.romaji;
+                    kana += consonantResult.kana;
                 }
             }
 
@@ -238,6 +205,8 @@
             document.getElementById('kana').textContent = kana;
             document.getElementById('playButton').disabled = false;
         }
+
+
 
 
     
